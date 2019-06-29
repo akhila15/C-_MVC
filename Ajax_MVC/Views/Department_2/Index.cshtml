@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Ajax_MVC.Models.Department_2>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<div id="d1" style="background-color:cyan; display:none"></div>
+<div id="l1" style="background-color:gray; display:none">
+    Please wait Loading
+</div>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Ajax.ActionLink("Employee", "ShowEmp", new { id = item.Id },
+               new AjaxOptions
+               {
+                   Confirm = "Sure to Get Data",
+                   HttpMethod = "Get",
+                   UpdateTargetId = "d1",
+                   LoadingElementId = "l1",
+                   InsertionMode = InsertionMode.Replace,
+                   OnSuccess = "f1"
+               })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+@section scripts{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.0.js"></script>
+    <script>
+        $.fx.speeds._default = 2000;
+        $(document).ready(function () {
+            $("#d1").dialog({
+                autoOpen: false,
+                width: '800',
+                height: 'auto',
+                modal: true,
+                show: 'blind',
+                hide: 'explode'
+            });
+        });
+        function f1() {
+            $("#d1").dialog("open");
+        }
+    </script>
+}
